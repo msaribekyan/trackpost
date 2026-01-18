@@ -42,7 +42,7 @@ struct Package
 
 fn request(tracking_number: String) {
     let client = Client::new();
-    let url = format!("https://api.haypost.am/trackingNumber/?trackingNumber={}&lng=am", tracking_number);
+    let url = format!("https://api.haypost.am/trackingNumber/?trackingNumber={}&lng=en", tracking_number);
     match client.get(url).send() {
         Ok(result) => {
             let json_str = result.text().ok().unwrap();
@@ -54,7 +54,8 @@ fn request(tracking_number: String) {
                     else
                     {
                         let result = package.data.result;
-                        println!("{}", result[result.len() - 1].event)
+                        let latest_result = &result[result.len() - 1];
+                        println!("{}: {}", latest_result.location, latest_result.event)
                     }
                 },
                 Err(e) => {
