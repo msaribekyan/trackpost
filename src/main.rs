@@ -9,9 +9,9 @@ fn main() {
     ];
 
     for track in tracking {
-        let resp = match request(track.1) {
-            Ok(r) => println!("{r}"),
-            Err(e) => println!("Error: {e}"),
+        match request(track.1) {
+            Ok(r) => println!("{}: {r}", track.0),
+            Err(e) => println!("{}: Error: {e}", track.0),
         };
     }
 

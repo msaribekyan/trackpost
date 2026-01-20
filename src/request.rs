@@ -77,6 +77,9 @@ pub mod request {
         }
 
         let latest_result = &result[result.len() - 1];
-        return Ok(format!("{} - {}", latest_result.location, latest_result.event));
+        return Ok(format!(
+            "{} - {}",
+            latest_result.location, latest_result.event
+        ));
     }
 }
