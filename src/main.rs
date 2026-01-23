@@ -1,17 +1,26 @@
 use std::process::exit;
 mod request;
-use request::request::request;
+use request::RequestError;
+use request::request;
 
 fn main() {
     let tracking: [(&str, &str); _] = [
-        ("Package 1", "UB848893366LV"),
-        ("Package 2", "UB849021351LV"),
+        ("Package 1", "UB849330327LV"),
+        ("Package 2", "UB849329641LV"),
     ];
 
-    for track in tracking {
-        match request(track.1) {
-            Ok(r) => println!("{}: {r}", track.0),
-            Err(e) => println!("{}: Error: {e}", track.0),
+    for (name, number) in tracking {
+        match request(number) {
+            Ok(r) => println!("{}: {r}", name),
+            Err(e) => match e {
+                RequestError::FetchingError => println!("{}: Fetching error", name),
+                RequestError::BodyError => println!("{}: Response without body", name),
+                RequestError::JSONError => println!("{}: Cannot parse JSON", name),
+                RequestError::PackageError(err) => println!("{}: {}", name, err),
+                RequestError::APIError => println!("{}: API error", name),
+                RequestError::EmptyError => println!("{}: Package data empty", name),
+                RequestError::NoInfoError => println!("{}: No info", name),
+            },
         };
     }
 
